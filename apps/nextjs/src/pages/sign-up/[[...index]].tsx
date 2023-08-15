@@ -7,7 +7,7 @@ const SignUpPage = () => (
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Sign In
         </h1>
-        <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+        <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" afterSignUpUrl={"/stores"} />
       </div>
     </div>
   </main>
