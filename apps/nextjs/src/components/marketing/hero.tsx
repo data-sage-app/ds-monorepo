@@ -110,7 +110,7 @@ export default function Hero() {
               href="/sign-in"
               className="hover:bg-accent/90 rounded-md border-2 border-lime-500 bg-lime-500 px-3.5 py-2.5 text-sm font-semibold text-neutral-800 shadow-sm transition-colors duration-200 hover:border-lime-700 hover:bg-lime-700 focus-visible:outline"
             >
-              Log In <span aria-hidden="true">&rarr;</span>
+              Sign In <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -154,7 +154,7 @@ export default function Hero() {
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Log in
+                    Sign in
                   </a>
                 </div>
               </div>
