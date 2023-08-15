@@ -2,9 +2,17 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/"],
+  publicRoutes: ["/", "/sign-in", "/sign-up"],
 
   afterAuth(auth, req, evt) {
+    // Reditect to stores selection page on sign up or sign in if already logged in
+
+    if (auth.userId && ["/sign-in", "/sign-up"].includes(req.nextUrl.pathname)) {
+      const path = new URL('/stores', req.url)
+      return NextResponse.redirect(path);
+    }
+    
+
     // handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
