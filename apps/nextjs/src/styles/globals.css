@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  background-color: #171717;
+  font-family: "Poppins", sans-serif;
+  src: url("../fonts/Poppins-Regular.woff2") format("woff2");
+  color: #e5e5e5;
+}
