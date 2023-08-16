@@ -6,7 +6,6 @@ import {
   CategoryBar,
   Col,
   Divider,
-  DonutChart,
   Flex,
   Grid,
   List,
@@ -33,15 +32,18 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../../components/layouts/dashboard";
 import { faker } from "@faker-js/faker";
 
-interface TotalRevenueDataProps {
+type MonthData = {
   Month: string;
   "Total Revenue": number;
   "Total New Customer Revenue": number;
-}
+  Profit: number;
+  "New Customer Revenue %": number;
+  "Industry Average %": number;
+};
 
 export default function Overview() {
   const [totalRevenueVsNewCustomerData, setTotalRevenueVsNewCustomerData] =
-    useState<TotalRevenueDataProps[]>([]);
+    useState<MonthData[]>([]);
 
   useEffect(() => {
     const data = TotalRevenueVsNewCustomerData();
@@ -208,18 +210,15 @@ export default function Overview() {
                   className="space-x-1"
                 >
                   <Metric className="mt-2">
-                    {currencyFormatter(NCPAData.metric as number)}
+                    {currencyFormatter(NCPAData.metric)}
                   </Metric>
                 </Flex>
                 <CategoryBar
                   values={[60, 20, 10, 10]}
                   colors={["emerald", "yellow", "orange", "rose"]}
-                  markerValue={
-                    (((NCPAData.metric as number) /
-                      NCPAData.ceiling) as number) * 100
-                  }
+                  markerValue={(NCPAData.metric / NCPAData.ceiling) * 100}
                   tooltip={`NCPA is the cost of acquiring a new customer. Your NCPA Ceiling is ${currencyFormatter(
-                    NCPAData.ceiling as number,
+                    NCPAData.ceiling,
                   )}`}
                   showLabels={false}
                   className="mt-5"
