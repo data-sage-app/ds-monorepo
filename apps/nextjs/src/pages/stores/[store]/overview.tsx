@@ -31,6 +31,7 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../../../components/layouts/dashboard";
 import { faker } from "@faker-js/faker";
+import { api } from "../../../utils/api";
 
 type MonthData = {
   Month: string;
@@ -51,6 +52,7 @@ export default function Overview() {
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  
   return (
     <DashboardLayout>
       <main>

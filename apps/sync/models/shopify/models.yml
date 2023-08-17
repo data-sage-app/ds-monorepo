@@ -1,0 +1,27 @@
+version: 2
+models:
+  - name: shopify_products
+    columns:
+      - name: shopify_id
+        tests:
+          - dbt_constraints.primary_key
+  - name: shopify_product_variants
+    columns:
+      - name: shopify_id
+        tests:
+          - dbt_constraints.primary_key
+      - name: shopify_product_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_products')
+              pk_column_name: shopify_id
+  - name: shopify_product_images
+    columns:
+      - name: shopify_id
+        tests:
+          - dbt_constraints.primary_key
+      - name: shopify_product_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_products')
+              pk_column_name: shopify_id

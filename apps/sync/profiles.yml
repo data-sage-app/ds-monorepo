@@ -1,0 +1,13 @@
+datasage:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ var('DB_HOST') }}"
+      user: "{{ var('DBT_USER') }}"
+      password: "{{ var('DBT_PASSWORD') }}"
+      port: "{{ var('DB_PORT') }}"
+      dbname: "{{ var('DB_NAME') }}"
+      schema: dbt
+      threads: 4
+      sslmode: prefer

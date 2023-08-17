@@ -2,7 +2,7 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/", "/sign-in", "/sign-up"],
+  publicRoutes: ["/", "/sign-in", "/sign-up", "/api/clerk/webhook"],
 
   afterAuth(auth, req, evt) {
     // Reditect to stores selection page on sign up or sign in if already logged in
