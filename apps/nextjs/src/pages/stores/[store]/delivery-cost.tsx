@@ -1,7 +1,7 @@
 import { on } from "events";
 import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -94,6 +94,7 @@ export default function DeliveryCosts() {
       onSuccess: () => {
         setShowCreateDeliveryCostModal(false);
         void costsOfDelivery.refetch();
+        void totalCostOfDelivery.refetch();
       },
     });
 
@@ -102,13 +103,16 @@ export default function DeliveryCosts() {
       onSuccess: () => {
         setShowUpdateDeliveryCostModal(false);
         void costsOfDelivery.refetch();
+        void totalCostOfDelivery.refetch();
       },
     });
 
   const deleteCostMutation =
     api.costOfDelivery.deleteCostOfDelivery.useMutation<DeleteDeliveryCost>({
       onSuccess: () => {
+        setShowUpdateDeliveryCostModal(false);
         void costsOfDelivery.refetch();
+        void totalCostOfDelivery.refetch();
       },
     });
 
@@ -324,6 +328,7 @@ function CreateDeliveryCostModal({
                     <Text className="mt-4">Amount</Text>
                     {formState.errors.value?.message ? (
                       <NumberInput
+                        icon={CurrencyDollarIcon}
                         defaultValue={0}
                         className="mt-1"
                         {...register("value", {
@@ -334,6 +339,7 @@ function CreateDeliveryCostModal({
                       />
                     ) : (
                       <NumberInput
+                        icon={CurrencyDollarIcon}
                         defaultValue={0}
                         className="mt-1"
                         {...register("value", {
@@ -435,6 +441,7 @@ function UpdateDeliveryCostModal({
                           {formState.errors.value?.message ? (
                             <NumberInput
                               defaultValue={0}
+                              icon={CurrencyDollarIcon}
                               className="mt-1"
                               {...register("value", {
                                 setValueAs: (value) =>
@@ -446,6 +453,7 @@ function UpdateDeliveryCostModal({
                           ) : (
                             <NumberInput
                               defaultValue={0}
+                              icon={CurrencyDollarIcon}
                               className="mt-1"
                               {...register("value", {
                                 setValueAs: (value) =>
