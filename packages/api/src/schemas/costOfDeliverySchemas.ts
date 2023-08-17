@@ -6,9 +6,9 @@ export const createCostOfDeliveryInput = z.object({
 });
 
 export const selectCostOfDeliveryInput = z.object({
-  id: z.number(),
-  name: z.string(),
-  value: z.number(),
+  id: z.number().min(1, "Id should be positive"),
+  name: z.string().min(1, "Cost name is required"),
+  value: z.number().positive("Amount should be positive"),
 });
 
 export const deleteCostOfDeliveryInput = z.object({

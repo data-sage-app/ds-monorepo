@@ -40,6 +40,7 @@ export const costOfDeliveryRouter = createTRPCRouter({
   updateCostOfDelivery: protectedProcedure
     .input(selectCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
+      console.log(input.id);
       return ctx.prisma.costOfDeliveryLineItems.update({
         where: {
           id: input.id,
