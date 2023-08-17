@@ -3,11 +3,6 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { createCostOfDeliveryInput } from "../schemas";
 import { z } from "zod";
 
-export const costOfDeliveryInput = z.object({
-  name: z.string(),
-  value: z.number(),
-});
-
 export const costOfDeliveryRouter = createTRPCRouter({
   getCostOfDelivery: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.costOfDeliveryLineItems.findMany({
