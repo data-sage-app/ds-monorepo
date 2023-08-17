@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { faker } from "@faker-js/faker";
+import { ChartPieIcon, ListBulletIcon } from "@heroicons/react/24/outline";
 import {
   AreaChart,
   BadgeDelta,
@@ -19,19 +22,15 @@ import {
   Text,
   Title,
 } from "@tremor/react";
-import { ChartPieIcon, ListBulletIcon } from "@heroicons/react/24/outline";
+
+import DashboardLayout from "../../components/layouts/dashboard";
 import {
   averageArray,
   currencyFormatter,
   numberFormatter,
   percentageFormatter,
   sumArray,
-} from "../../../utils/formatters";
-import { useEffect, useState } from "react";
-
-import DashboardLayout from "../../../components/layouts/dashboard";
-import { faker } from "@faker-js/faker";
-import { api } from "../../../utils/api";
+} from "../../utils/formatters";
 
 type MonthData = {
   Month: string;
@@ -52,7 +51,7 @@ export default function Overview() {
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  
+
   return (
     <DashboardLayout>
       <main>

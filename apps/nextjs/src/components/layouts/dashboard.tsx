@@ -1,21 +1,13 @@
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChartPieIcon,
-  ClipboardDocumentCheckIcon,
-  Cog6ToothIcon,
-  CursorArrowRippleIcon,
-  EnvelopeOpenIcon,
-  HomeIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/solid";
-import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { SignInButton, useAuth, UserButton } from "@clerk/nextjs";
+import { Dialog, Transition } from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import FullLogo from "../../assets/fullLogo.svg";
-import Image from "next/image";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { useRouter } from "next/router";
+import { navigation } from "../../config/paths";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -25,62 +17,6 @@ function Sidebar({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const { isSignedIn } = useAuth();
-
-  const navigation = [
-    {
-      name: "MENU",
-      items: [
-        {
-          name: "Overview",
-          tag: "overview",
-          href: `/stores/${router.query.store}/overview`,
-          icon: HomeIcon,
-        },
-        {
-          name: "Reports",
-          tag: "reports",
-          href: `/stores/${router.query.store}/reports`,
-          icon: ChartPieIcon,
-        },
-        {
-          name: "Retention",
-          tag: "retention",
-          href: `/stores/${router.query.store}/retention`,
-          icon: EnvelopeOpenIcon,
-        },
-        {
-          name: "Advertising",
-          tag: "advertising",
-          href: `/stores/${router.query.store}/advertising`,
-          icon: CursorArrowRippleIcon,
-        },
-      ],
-    },
-    {
-      name: "OTHERS",
-      items: [
-        {
-          name: "Settings",
-          tag: "settings",
-          href: `/stores/${router.query.store}/settings`,
-          icon: Cog6ToothIcon,
-        },
-        {
-          name: "Docs",
-          tag: "docs",
-          href: "/docs",
-          icon: ClipboardDocumentCheckIcon,
-        },
-        {
-          name: "Help",
-          tag: "help",
-          href: "/help",
-          icon: InformationCircleIcon,
-        },
-      ],
-    },
-  ];
-
   return (
     <>
       <div className="h-full bg-neutral-900">
@@ -140,7 +76,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-neutral-900 px-6 pb-4">
                     <div className="flex h-20 shrink-0 items-center justify-center">
                       <Image
-                        src={FullLogo}
+                        src={FullLogo as string}
                         alt="DataSage"
                         className=" h-12 w-auto"
                       />
