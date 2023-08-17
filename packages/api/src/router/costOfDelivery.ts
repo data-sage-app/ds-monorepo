@@ -1,6 +1,10 @@
+import {
+  createCostOfDeliveryInput,
+  deleteCostOfDeliveryInput,
+  selectCostOfDeliveryInput,
+} from "../schemas/costOfDeliverySchemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-import { createCostOfDeliveryInput } from "../schemas/costOfDeliverySchemas";
 import { z } from "zod";
 
 export const costOfDeliveryRouter = createTRPCRouter({
@@ -36,13 +40,7 @@ export const costOfDeliveryRouter = createTRPCRouter({
   }),
 
   updateCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
+    .input(selectCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.costOfDeliveryLineItems.update({
         where: {
@@ -56,32 +54,11 @@ export const costOfDeliveryRouter = createTRPCRouter({
     }),
 
   deleteCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-      }),
-    )
+    .input(deleteCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.costOfDeliveryLineItems.delete({
         where: {
           id: input.id,
-        },
-      });
-    }),
-
-  selectCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.costOfDeliveryLineItems.findMany({
-        where: {
-          organizationId: ctx.auth.organization?.id,
-          name: input.name,
-          value: input.value,
         },
       });
     }),
