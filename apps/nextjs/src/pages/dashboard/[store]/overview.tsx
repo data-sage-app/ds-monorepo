@@ -23,14 +23,14 @@ import {
   Title,
 } from "@tremor/react";
 
-import DashboardLayout from "../../components/layouts/dashboard";
+import DashboardLayout from "../../../components/layouts/dashboard";
 import {
   averageArray,
   currencyFormatter,
   numberFormatter,
   percentageFormatter,
   sumArray,
-} from "../../utils/formatters";
+} from "../../../utils/formatters";
 
 type MonthData = {
   Month: string;

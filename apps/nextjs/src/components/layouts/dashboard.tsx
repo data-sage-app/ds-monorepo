@@ -1,13 +1,26 @@
 import React, { Fragment, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { SignInButton, useAuth, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  useAuth,
+  useOrganization,
+  UserButton,
+} from "@clerk/nextjs";
 import { Dialog, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ChartPieIcon,
+  ClipboardDocumentCheckIcon,
+  Cog6ToothIcon,
+  CursorArrowRippleIcon,
+  EnvelopeOpenIcon,
+  HomeIcon,
+  LinkIcon,
+} from "@heroicons/react/24/solid";
 
 import FullLogo from "../../assets/fullLogo.svg";
-import { navigation } from "../../config/paths";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -16,7 +29,68 @@ function classNames(...classes: string[]) {
 function Sidebar({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+
   const { isSignedIn } = useAuth();
+
+  const navigation = [
+    {
+      name: "MENU",
+      items: [
+        {
+          name: "Overview",
+          tag: "overview",
+          href: `/dashboard/${useOrganization().organization?.slug}/overview`,
+          icon: HomeIcon,
+        },
+        {
+          name: "Reports",
+          tag: "reports",
+          href: `/dashboard/${useOrganization().organization?.slug}/reports`,
+          icon: ChartPieIcon,
+        },
+        {
+          name: "Advertising",
+          tag: "retention",
+          href: `/dashboard/${
+            useOrganization().organization?.slug
+          }/advertising`,
+          icon: CursorArrowRippleIcon,
+        },
+        {
+          name: "Retention",
+          tag: "advertising",
+          href: `/dashboard/${useOrganization().organization?.slug}/retention`,
+          icon: EnvelopeOpenIcon,
+        },
+      ],
+    },
+    {
+      name: "OTHERS",
+      items: [
+        {
+          name: "Calender",
+          tag: "settings",
+          href: `/dashboard/${useOrganization().organization?.slug}/settings`,
+          icon: Cog6ToothIcon,
+        },
+        {
+          name: "Integrations",
+          tag: "docs",
+          href: `/dashboard/${
+            useOrganization().organization?.slug
+          }/integrations`,
+          icon: LinkIcon,
+        },
+        {
+          name: "Docs",
+          tag: "docs",
+          href: "/docs",
+          icon: ClipboardDocumentCheckIcon,
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <div className="h-full bg-neutral-900">
@@ -95,7 +169,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                     href={item.href}
                                     className={classNames(
                                       router.pathname ===
-                                        `/stores/[store]/${item.tag}`
+                                        `/dashboard/[store]/${item.tag}`
                                         ? "bg-lime-400/10 font-medium text-lime-500"
                                         : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
                                       "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
@@ -104,7 +178,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                     <item.icon
                                       className={classNames(
                                         router.pathname ===
-                                          `/stores/[store]/${item.tag}`
+                                          `/dashboard/[store]/${item.tag}`
                                           ? "text-lime-500"
                                           : "text-neutral-100 group-hover:text-neutral-100",
                                         "h-6 w-6 flex-shrink-0",
@@ -149,7 +223,8 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                           <a
                             href={item.href}
                             className={classNames(
-                              router.pathname === `/stores/[store]/${item.tag}`
+                              router.pathname ===
+                                `/dashboard/[store]/${item.tag}`
                                 ? "bg-lime-400/10 font-medium text-lime-500"
                                 : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
                               "group flex items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
@@ -158,7 +233,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                             <item.icon
                               className={classNames(
                                 router.pathname ===
-                                  `/stores/[store]/${item.tag}`
+                                  `/dashboard/[store]/${item.tag}`
                                   ? "text-lime-500"
                                   : "text-neutral-100 group-hover:text-neutral-100",
                                 "h-6 w-6 flex-shrink-0",
