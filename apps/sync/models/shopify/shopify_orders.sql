@@ -1,12 +1,13 @@
 {{ config(schema='ods') }}
 
-WITH latest_images AS (
+WITH latest_orders AS (
     SELECT 
         id,
         ds_shopify_prefix,
         ds_clerk_org_id,
         ds_row_date,
         shopify_data->>'id' AS shopify_id,
+        shopify_data->'customer'->>'id' as shopify_customer_id,
         shopify_data->>'admin_graphql_api_id' as admin_graphql_api_id,
         shopify_data->>'browser_ip' as browser_ip,
         shopify_data->>'buyer_accepts_marketing' as buyer_accepts_marketing,
@@ -124,7 +125,6 @@ WITH latest_images AS (
         shopify_data->'billing_address'->>'name' as billing_address_name,
         shopify_data->'billing_address'->>'country_code' as billing_address_country_code,
         shopify_data->'billing_address'->>'province_code' as billing_address_province_code,
-        shopify_data->'customer'->>'id' as customer_id,
         shopify_data->'customer'->>'email' as customer_email,
         shopify_data->'customer'->>'accepts_marketing' as customer_accepts_marketing,
         shopify_data->'customer'->>'created_at' as customer_created_at,
@@ -190,5 +190,5 @@ WITH latest_images AS (
 )
 
 SELECT *
-FROM latest_images
+FROM latest_orders
 WHERE rn = 1

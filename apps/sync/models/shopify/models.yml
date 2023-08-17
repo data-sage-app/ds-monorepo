@@ -30,6 +30,11 @@ models:
       - name: shopify_id
         tests:
           - dbt_constraints.primary_key
+      - name: shopify_customer_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_customers')
+              pk_column_name: shopify_id
   - name: shopify_order_line_items
     columns:
       - name: shopify_id
