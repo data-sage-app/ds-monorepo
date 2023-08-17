@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+import { createCostOfDeliveryInput } from "../schemas";
 import { z } from "zod";
 
 export const costOfDeliveryInput = z.object({
@@ -17,12 +18,7 @@ export const costOfDeliveryRouter = createTRPCRouter({
   }),
 
   createCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
+    .input(createCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.costOfDeliveryLineItems.create({
         data: {

@@ -27,21 +27,15 @@ import {
   type UseFormRegister,
   type UseFormReturn,
 } from "react-hook-form";
-import { z } from "zod";
+
+import { createCostOfDeliveryInput } from "@acme/api/src/schemas";
 
 import { api, type RouterInputs } from "~/utils/api";
 import { currencyFormatter } from "~/utils/formatters";
 import DashboardLayout from "~/components/layouts/dashboard";
 
-type createCostOfDelivery =
+type CreateDeliveryCost =
   RouterInputs["costOfDelivery"]["createCostOfDelivery"];
-
-const createDeliveryCostSchema = z.object({
-  name: z.string().min(1, "Cost name is required"),
-  value: z.number().positive("Amount should be positive"),
-});
-
-type CreateDeliveryCost = z.infer<typeof createDeliveryCostSchema>;
 
 type CreateModalProps = {
   isOpen: boolean;
@@ -62,11 +56,11 @@ export default function DeliveryCosts() {
     api.costOfDelivery.getTotalCostOfDelivery.useQuery();
 
   const createForm: UseFormReturn<CreateDeliveryCost> = useForm({
-    resolver: zodResolver(createDeliveryCostSchema),
+    resolver: zodResolver(createCostOfDeliveryInput),
   });
 
   const createCostMutation =
-    api.costOfDelivery.createCostOfDelivery.useMutation<createCostOfDelivery>({
+    api.costOfDelivery.createCostOfDelivery.useMutation<CreateDeliveryCost>({
       onSuccess: () => {
         setShowCreateDeliveryCostModal(false);
         void costsOfDelivery.refetch();
