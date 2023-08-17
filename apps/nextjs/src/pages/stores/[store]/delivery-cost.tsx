@@ -28,7 +28,7 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 
-import { createCostOfDeliveryInput } from "@acme/api/src/schemas";
+import { createCostOfDeliveryInput } from "@acme/api/src/schemas/costOfDeliverySchemas";
 
 import { api, type RouterInputs } from "~/utils/api";
 import { currencyFormatter } from "~/utils/formatters";

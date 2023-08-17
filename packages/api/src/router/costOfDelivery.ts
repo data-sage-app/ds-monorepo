@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-import { createCostOfDeliveryInput } from "../schemas";
+import { createCostOfDeliveryInput } from "../schemas/costOfDeliverySchemas";
 import { z } from "zod";
 
 export const costOfDeliveryRouter = createTRPCRouter({
