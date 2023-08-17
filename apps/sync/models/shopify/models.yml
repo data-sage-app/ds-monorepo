@@ -25,3 +25,28 @@ models:
           - dbt_constraints.foreign_key:
               pk_table_name: ref('shopify_products')
               pk_column_name: shopify_id
+  - name: shopify_orders
+    columns:
+      - name: shopify_id
+        tests:
+          - dbt_constraints.primary_key
+  - name: shopify_order_line_items
+    columns:
+      - name: shopify_id
+        tests:
+          - dbt_constraints.primary_key
+      - name: shopify_order_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_orders')
+              pk_column_name: shopify_id
+      - name: shopify_product_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_products')
+              pk_column_name: shopify_id
+      - name: shopify_product_variant_id
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('shopify_product_variants')
+              pk_column_name: shopify_id
