@@ -5,8 +5,6 @@ import {
 } from "../schemas/costOfDeliverySchemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-import { z } from "zod";
-
 export const costOfDeliveryRouter = createTRPCRouter({
   getCostOfDelivery: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.costOfDeliveryLineItems.findMany({
