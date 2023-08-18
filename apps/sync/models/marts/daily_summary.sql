@@ -3,7 +3,7 @@
 WITH 
 Stores AS (
 	SELECT ds_shopify_prefix, ds_clerk_org_id, MIN(created_at::DATE) AS start_date, MAX(created_at::DATE) AS end_date
-	FROM dbt_ods.shopify_orders
+	FROM {{ref('shopify_orders')}}
 	GROUP BY ds_shopify_prefix, ds_clerk_org_id
 ),
 Date_Dimension AS (
@@ -24,7 +24,7 @@ Orders_That_Are_First_Order AS (
       o.*,
       MIN(o.order_number) OVER (PARTITION BY o.shopify_customer_id) AS FIRST_ORDER_NUMBER,
       order_number = MIN(o.order_number) OVER (PARTITION BY o.shopify_customer_id) AS FIRST_ORDER_FLAG
-    FROM dbt_ods.shopify_orders AS o
+    FROM {{ref('shopify_orders')}} AS o
   ) AS o_with_first_order
   WHERE o_with_first_order.FIRST_ORDER_FLAG = TRUE
 ),
@@ -35,7 +35,7 @@ Total_Orders AS (
 	  ds_clerk_org_id,
     COUNT(*) AS total_orders,
     SUM(total_price) AS total_order_value
-  FROM dbt_ods.shopify_orders
+  FROM {{ref('shopify_orders')}}
   GROUP BY created_at::DATE, ds_shopify_prefix, ds_clerk_org_id
 )
 SELECT
