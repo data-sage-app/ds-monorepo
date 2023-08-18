@@ -7,13 +7,14 @@ import {
   useOrganization,
   UserButton,
 } from "@clerk/nextjs";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Disclosure, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
+  CalendarDaysIcon,
   ChartPieIcon,
+  ChevronRightIcon,
   ClipboardDocumentCheckIcon,
-  Cog6ToothIcon,
   CursorArrowRippleIcon,
   EnvelopeOpenIcon,
   HomeIcon,
@@ -47,6 +48,38 @@ function Sidebar({ children }: { children: React.ReactNode }) {
           tag: "reports",
           href: `/dashboard/${useOrganization().organization?.slug}/reports`,
           icon: ChartPieIcon,
+          children: [
+            {
+              name: "Profitability",
+              href: `/dashboard/${
+                useOrganization().organization?.slug
+              }/reports/profitability`,
+            },
+            {
+              name: "Customer Aquisition",
+              href: `/dashboard/${
+                useOrganization().organization?.slug
+              }/reports/new-customers`,
+            },
+            {
+              name: "Sales",
+              href: `/dashboard/${
+                useOrganization().organization?.slug
+              }/reports/sales`,
+            },
+            {
+              name: "Inventory",
+              href: `/dashboard/${
+                useOrganization().organization?.slug
+              }/reports/inventory`,
+            },
+            {
+              name: "Behavior",
+              href: `/dashboard/${
+                useOrganization().organization?.slug
+              }/reports/behavior`,
+            },
+          ],
         },
         {
           name: "Advertising",
@@ -62,17 +95,17 @@ function Sidebar({ children }: { children: React.ReactNode }) {
           href: `/dashboard/${useOrganization().organization?.slug}/retention`,
           icon: EnvelopeOpenIcon,
         },
+        {
+          name: "Calender",
+          tag: "settings",
+          href: `/dashboard/${useOrganization().organization?.slug}/calender`,
+          icon: CalendarDaysIcon,
+        },
       ],
     },
     {
       name: "OTHERS",
       items: [
-        {
-          name: "Calender",
-          tag: "settings",
-          href: `/dashboard/${useOrganization().organization?.slug}/settings`,
-          icon: Cog6ToothIcon,
-        },
         {
           name: "Integrations",
           tag: "docs",
@@ -165,28 +198,90 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                             <ul role="list" className="-mx-2 space-y-1">
                               {item.items.map((item) => (
                                 <li key={item.name}>
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      router.pathname ===
-                                        `/dashboard/[store]/${item.tag}`
-                                        ? "bg-lime-400/10 font-medium text-lime-500"
-                                        : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
-                                      "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
-                                    )}
-                                  >
-                                    <item.icon
+                                  {!item.children ? (
+                                    <a
+                                      href={item.href}
                                       className={classNames(
                                         router.pathname ===
                                           `/dashboard/[store]/${item.tag}`
-                                          ? "text-lime-500"
-                                          : "text-neutral-100 group-hover:text-neutral-100",
-                                        "h-6 w-6 flex-shrink-0",
+                                          ? "bg-lime-400/10 font-medium text-lime-500"
+                                          : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                        "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
                                       )}
-                                      aria-hidden="true"
-                                    />
-                                    {item.name}
-                                  </a>
+                                    >
+                                      <item.icon
+                                        className={classNames(
+                                          router.pathname ===
+                                            `/dashboard/[store]/${item.tag}`
+                                            ? "text-lime-500"
+                                            : "text-neutral-100 group-hover:text-neutral-100",
+                                          "h-6 w-6 flex-shrink-0",
+                                        )}
+                                        aria-hidden="true"
+                                      />
+                                      {item.name}
+                                    </a>
+                                  ) : (
+                                    <Disclosure as="div">
+                                      {({ open }) => (
+                                        <ul className="flex flex-1 flex-col">
+                                          <Disclosure.Button
+                                            className={classNames(
+                                              router.pathname ===
+                                                `/dashboard/[store]/${item.tag}`
+                                                ? "bg-lime-400/10 font-medium text-lime-500"
+                                                : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                              "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                            )}
+                                          >
+                                            <item.icon
+                                              className={classNames(
+                                                router.pathname ===
+                                                  `/dashboard/[store]/${item.tag}`
+                                                  ? "text-lime-500"
+                                                  : "text-neutral-100 group-hover:text-neutral-100",
+                                                "h-6 w-6 flex-shrink-0",
+                                              )}
+                                              aria-hidden="true"
+                                            />
+                                            {item.name}
+                                            <ChevronRightIcon
+                                              className={classNames(
+                                                open
+                                                  ? "rotate-90 text-lime-500"
+                                                  : "text-neutral-100 group-hover:text-neutral-100",
+                                                "ml-auto h-6 w-6 ",
+                                              )}
+                                              aria-hidden="true"
+                                            />
+                                          </Disclosure.Button>
+                                          <Disclosure.Panel
+                                            as="ul"
+                                            className="mt-1 px-2"
+                                          >
+                                            {item.children.map((subItem) => (
+                                              <li key={subItem.name}>
+                                                {/* 44px */}
+                                                <Disclosure.Button
+                                                  as="a"
+                                                  href={subItem.href}
+                                                  className={classNames(
+                                                    router.pathname ===
+                                                      `/dashboard/[store]/${item.tag}`
+                                                      ? "bg-lime-400/10 font-medium text-lime-500"
+                                                      : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                                    "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                                  )}
+                                                >
+                                                  {subItem.name}
+                                                </Disclosure.Button>
+                                              </li>
+                                            ))}
+                                          </Disclosure.Panel>
+                                        </ul>
+                                      )}
+                                    </Disclosure>
+                                  )}
                                 </li>
                               ))}
                             </ul>
@@ -207,7 +302,11 @@ function Sidebar({ children }: { children: React.ReactNode }) {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-neutral-700 bg-neutral-900 px-6 pb-4">
             <div className="flex h-20 shrink-0 items-center justify-start">
               <a href="/">
-                <Image src={FullLogo} alt="DataSage" className=" h-12 w-auto" />
+                <Image
+                  src={FullLogo as string}
+                  alt="DataSage"
+                  className=" h-12 w-auto"
+                />
               </a>
             </div>
             <nav className="flex flex-1 flex-col">
@@ -220,28 +319,90 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                     <ul role="list" className="-mx-2 space-y-1">
                       {item.items.map((item) => (
                         <li key={item.name}>
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              router.pathname ===
-                                `/dashboard/[store]/${item.tag}`
-                                ? "bg-lime-400/10 font-medium text-lime-500"
-                                : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
-                              "group flex items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
-                            )}
-                          >
-                            <item.icon
+                          {!item.children ? (
+                            <a
+                              href={item.href}
                               className={classNames(
                                 router.pathname ===
                                   `/dashboard/[store]/${item.tag}`
-                                  ? "text-lime-500"
-                                  : "text-neutral-100 group-hover:text-neutral-100",
-                                "h-6 w-6 flex-shrink-0",
+                                  ? "bg-lime-400/10 font-medium text-lime-500"
+                                  : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                "group flex items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
                               )}
-                              aria-hidden="true"
-                            />
-                            {item.name}
-                          </a>
+                            >
+                              <item.icon
+                                className={classNames(
+                                  router.pathname ===
+                                    `/dashboard/[store]/${item.tag}`
+                                    ? "text-lime-500"
+                                    : "text-neutral-100 group-hover:text-neutral-100",
+                                  "h-6 w-6 flex-shrink-0",
+                                )}
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                            </a>
+                          ) : (
+                            <Disclosure as="div">
+                              {({ open }) => (
+                                <ul className="flex flex-1 flex-col">
+                                  <Disclosure.Button
+                                    className={classNames(
+                                      router.pathname ===
+                                        `/dashboard/[store]/${item.tag}`
+                                        ? "bg-lime-400/10 font-medium text-lime-500"
+                                        : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                      "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                    )}
+                                  >
+                                    <item.icon
+                                      className={classNames(
+                                        router.pathname ===
+                                          `/dashboard/[store]/${item.tag}`
+                                          ? "text-lime-500"
+                                          : "text-neutral-100 group-hover:text-neutral-100",
+                                        "h-6 w-6 flex-shrink-0",
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                    {item.name}
+                                    <ChevronRightIcon
+                                      className={classNames(
+                                        open
+                                          ? "rotate-90 text-lime-500"
+                                          : "text-neutral-100 group-hover:text-neutral-100",
+                                        "ml-auto h-6 w-6 ",
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  </Disclosure.Button>
+                                  <Disclosure.Panel
+                                    as="ul"
+                                    className="mt-1 px-2"
+                                  >
+                                    {item.children.map((subItem) => (
+                                      <li key={subItem.name}>
+                                        {/* 44px */}
+                                        <Disclosure.Button
+                                          as="a"
+                                          href={subItem.href}
+                                          className={classNames(
+                                            router.pathname ===
+                                              `/dashboard/[store]/${item.tag}`
+                                              ? "bg-lime-400/10 font-medium text-lime-500"
+                                              : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
+                                            "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                          )}
+                                        >
+                                          {subItem.name}
+                                        </Disclosure.Button>
+                                      </li>
+                                    ))}
+                                  </Disclosure.Panel>
+                                </ul>
+                              )}
+                            </Disclosure>
+                          )}
                         </li>
                       ))}
                     </ul>
