@@ -1,11 +1,9 @@
+import {
+  createCostOfDeliveryInput,
+  deleteCostOfDeliveryInput,
+  selectCostOfDeliveryInput,
+} from "../schemas/costOfDeliverySchemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-
-import { z } from "zod";
-
-export const costOfDeliveryInput = z.object({
-  name: z.string(),
-  value: z.number(),
-});
 
 export const costOfDeliveryRouter = createTRPCRouter({
   getCostOfDelivery: protectedProcedure.query(({ ctx }) => {
@@ -17,12 +15,7 @@ export const costOfDeliveryRouter = createTRPCRouter({
   }),
 
   createCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
+    .input(createCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.costOfDeliveryLineItems.create({
         data: {
@@ -45,14 +38,9 @@ export const costOfDeliveryRouter = createTRPCRouter({
   }),
 
   updateCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
+    .input(selectCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
+      console.log(input.id);
       return ctx.prisma.costOfDeliveryLineItems.update({
         where: {
           id: input.id,
@@ -65,32 +53,11 @@ export const costOfDeliveryRouter = createTRPCRouter({
     }),
 
   deleteCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        id: z.number(),
-      }),
-    )
+    .input(deleteCostOfDeliveryInput)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.costOfDeliveryLineItems.delete({
         where: {
           id: input.id,
-        },
-      });
-    }),
-
-  selectCostOfDelivery: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        value: z.number(),
-      }),
-    )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.costOfDeliveryLineItems.findMany({
-        where: {
-          organizationId: ctx.auth.organization?.id,
-          name: input.name,
-          value: input.value,
         },
       });
     }),

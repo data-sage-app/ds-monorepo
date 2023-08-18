@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 import { ChartPieIcon, ListBulletIcon } from "@heroicons/react/24/outline";
-import { mutate, tidy } from "@tidyjs/tidy";
 import {
   AreaChart,
   BadgeDelta,
@@ -24,12 +23,7 @@ import {
   Title,
 } from "@tremor/react";
 
-import { useAllTimeSummary } from "~/hooks/analytics/useAllTimeSummary";
-import { useDailySummary } from "~/hooks/analytics/useDailySummary";
-import { useMonthlySummary } from "~/hooks/analytics/useMonthlySummary";
 import DashboardLayout from "../../../components/layouts/dashboard";
-import { api } from "../../../utils/api";
-import { industryAverageNewCustomerRevenuePct } from "../../../utils/constants";
 import {
   averageArray,
   currencyFormatter,
@@ -48,37 +42,15 @@ type MonthData = {
 };
 
 export default function Overview() {
-  const {
-    allTimeSummary,
-    isLoadingAllTimeSummary,
-    errorAllTimeSummary,
-    refetchAllTimeSummary,
-  } = useAllTimeSummary({ storePrefix: "hickory-apparel-au" });
+  const [totalRevenueVsNewCustomerData, setTotalRevenueVsNewCustomerData] =
+    useState<MonthData[]>([]);
 
-  const {
-    monthlySummary,
-    isLoadingMonthlySummary,
-    errorMonthlySummary,
-    refetchMonthlySummary,
-  } = useMonthlySummary({ storePrefix: "hickory-apparel-au" });
-
-  const {
-    dailySummary,
-    isLoadingDailySummary,
-    errorDailySummary,
-    refetchDailySummary,
-  } = useDailySummary({ storePrefix: "hickory-apparel-au" });
+  useEffect(() => {
+    const data = TotalRevenueVsNewCustomerData();
+    setTotalRevenueVsNewCustomerData(data);
+  }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const [fromDate, setFromDate] = useState(new Date());
-
-  const loading =
-    isLoadingDailySummary || isLoadingMonthlySummary || isLoadingAllTimeSummary;
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <DashboardLayout>
@@ -98,12 +70,12 @@ export default function Overview() {
                   <Tab className="p-4 text-left sm:p-6">
                     <p className="text-sm sm:text-base">New Customer Revenue</p>
                     <Metric className="mt-2 text-inherit">
-                      {allTimeSummary[
-                        "Total New Customer Revenue"
-                      ].toLocaleString("en-AU", {
-                        style: "currency",
-                        currency: "AUD",
-                      })}
+                      {currencyFormatter(
+                        sumArray(
+                          totalRevenueVsNewCustomerData,
+                          "Total New Customer Revenue",
+                        ),
+                      )}
                     </Metric>
                   </Tab>
                   <Tab className="p-4 text-left sm:p-6">
@@ -111,30 +83,22 @@ export default function Overview() {
                       NCR vs Total Revenue (%)
                     </p>
                     <Metric className="mt-2 text-inherit">
-                      {(
-                        (allTimeSummary["Total New Customer Revenue"] /
-                          allTimeSummary["Total Revenue"]) *
-                        100
-                      ).toFixed(2)}
-                      %
+                      {percentageFormatter(
+                        averageArray(
+                          totalRevenueVsNewCustomerData,
+                          "New Customer Revenue %",
+                        ),
+                      )}
                     </Metric>
                   </Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel className="p-6">
-                    <Title>
-                      Total Revenue vs New Customer Revenue for 12 Months (USD)
-                    </Title>
+                    <Title>Total Revenue vs New Customer Revenue (USD)</Title>
                     <AreaChart
                       className="mt-10 h-[30rem]"
-                      data={monthlySummary.filter(
-                        (d) =>
-                          d.monthStartDate >=
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 12),
-                          ),
-                      )}
-                      index="Month Name"
+                      data={totalRevenueVsNewCustomerData}
+                      index="Month"
                       categories={[
                         "Total Revenue",
                         "Total New Customer Revenue",
@@ -150,17 +114,11 @@ export default function Overview() {
                     <Title>New Customer Revenue (%) vs Industry Average</Title>
                     <AreaChart
                       className="mt-10 h-[30rem]"
-                      data={monthlySummary.filter(
-                        (d) =>
-                          d.monthStartDate >=
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 12),
-                          ),
-                      )}
+                      data={totalRevenueVsNewCustomerData}
                       index="Month"
                       categories={[
                         "New Customer Revenue %",
-                        "Industry Average NCR %",
+                        "Industry Average %",
                       ]}
                       colors={["lime", "blue"]}
                       valueFormatter={percentageFormatter}
@@ -205,21 +163,17 @@ export default function Overview() {
 
                 <Divider />
                 {selectedIndex === 0 ? (
-                  <>
-                    {/* 
-                    <AreaChart
-                      className="mt-8 h-60"
-                      data={totalRevenueVsNewCustomerData}
-                      index="Month"
-                      categories={["Total Revenue", "Profit"]}
-                      colors={["neutral", "lime"]}
-                      showYAxis={false}
-                      showLegend={false}
-                      startEndOnly={true}
-                      valueFormatter={currencyFormatter}
-                    />
-                  */}
-                  </>
+                  <AreaChart
+                    className="mt-8 h-60"
+                    data={totalRevenueVsNewCustomerData}
+                    index="Month"
+                    categories={["Total Revenue", "Profit"]}
+                    colors={["neutral", "lime"]}
+                    showYAxis={false}
+                    showLegend={false}
+                    startEndOnly={true}
+                    valueFormatter={currencyFormatter}
+                  />
                 ) : (
                   <>
                     <Flex className="mt-6" justifyContent="between">
