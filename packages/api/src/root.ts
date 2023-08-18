@@ -1,10 +1,10 @@
-import { analyticsShopifyRouter } from "./router/analyticsShopify";
+import { analyticsGeneralRouter } from "./router/analyticsGeneral";
 import { authRouter } from "./router/auth";
 import { costOfDeliveryRouter } from "./router/costOfDelivery";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  analyticsShopify: analyticsShopifyRouter,
+  analyticsGeneral: analyticsGeneralRouter,
   auth: authRouter,
   costOfDelivery: costOfDeliveryRouter,
 });
