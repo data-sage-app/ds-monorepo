@@ -1,11 +1,11 @@
 import { analyticsGeneralRouter } from "./router/analyticsGeneral";
-import { authRouter } from "./router/auth";
 import { costOfDeliveryRouter } from "./router/costOfDelivery";
+import { organizationRouter } from "./router/organization";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
   analyticsGeneral: analyticsGeneralRouter,
-  auth: authRouter,
+  organization: organizationRouter,
   costOfDelivery: costOfDeliveryRouter,
 });
 

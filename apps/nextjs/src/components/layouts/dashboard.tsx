@@ -54,30 +54,40 @@ function Sidebar({ children }: { children: React.ReactNode }) {
               href: `/dashboard/${
                 useOrganization().organization?.slug
               }/reports/profitability`,
+              category: "reports",
+              tag: "profitability",
             },
             {
-              name: "Customer Aquisition",
+              name: "Revenue",
               href: `/dashboard/${
                 useOrganization().organization?.slug
-              }/reports/new-customers`,
+              }/reports/revenue`,
+              category: "reports",
+              tag: "revenue",
             },
             {
-              name: "Sales",
+              name: "Expenses",
               href: `/dashboard/${
                 useOrganization().organization?.slug
-              }/reports/sales`,
+              }/reports/expenses`,
+              category: "reports",
+              tag: "expenses",
             },
             {
-              name: "Inventory",
+              name: "Orders",
               href: `/dashboard/${
                 useOrganization().organization?.slug
-              }/reports/inventory`,
+              }/reports/orders`,
+              category: "reports",
+              tag: "orders",
             },
             {
-              name: "Behavior",
+              name: "Sessions",
               href: `/dashboard/${
                 useOrganization().organization?.slug
-              }/reports/behavior`,
+              }/reports/sessions`,
+              category: "reports",
+              tag: "sessions",
             },
           ],
         },
@@ -267,7 +277,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                                   href={subItem.href}
                                                   className={classNames(
                                                     router.pathname ===
-                                                      `/dashboard/[store]/${item.tag}`
+                                                      `/dashboard/[store]/${subItem.category}/${subItem.tag}`
                                                       ? "bg-lime-400/10 font-medium text-lime-500"
                                                       : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
                                                     "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
@@ -313,7 +323,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 {navigation.map((item) => (
                   <li key={item.name}>
-                    <div className="my-3 text-xs font-medium leading-3 tracking-wide text-lime-500">
+                    <div className="my-2 text-xs font-medium leading-3 tracking-wide text-lime-500">
                       {item.name}
                     </div>
                     <ul role="list" className="-mx-2 space-y-1">
@@ -327,7 +337,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                   `/dashboard/[store]/${item.tag}`
                                   ? "bg-lime-400/10 font-medium text-lime-500"
                                   : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
-                                "group flex items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                "group flex items-center gap-x-4 rounded-md p-2 pl-4 text-sm leading-4 tracking-wide duration-200",
                               )}
                             >
                               <item.icon
@@ -352,7 +362,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                         `/dashboard/[store]/${item.tag}`
                                         ? "bg-lime-400/10 font-medium text-lime-500"
                                         : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
-                                      "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                      "group flex cursor-pointer items-center gap-x-4 rounded-md p-2 pl-4 text-sm leading-4 tracking-wide duration-200",
                                     )}
                                   >
                                     <item.icon
@@ -388,10 +398,10 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                                           href={subItem.href}
                                           className={classNames(
                                             router.pathname ===
-                                              `/dashboard/[store]/${item.tag}`
+                                              `/dashboard/[store]/${subItem.category}/${subItem.tag}`
                                               ? "bg-lime-400/10 font-medium text-lime-500"
                                               : "font-normal text-neutral-200 hover:bg-neutral-100/10 hover:text-neutral-100",
-                                            "group flex cursor-pointer items-center gap-x-4 rounded-md p-3 pl-4 text-sm leading-4 tracking-wide duration-200",
+                                            "group flex cursor-pointer items-center gap-x-4 rounded-md p-2 pl-4 text-sm leading-4 tracking-wide duration-200",
                                           )}
                                         >
                                           {subItem.name}

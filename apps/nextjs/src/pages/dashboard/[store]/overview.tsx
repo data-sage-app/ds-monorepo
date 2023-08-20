@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { faker } from "@faker-js/faker";
 import { ChartPieIcon, ListBulletIcon } from "@heroicons/react/24/outline";
-import { mutate, tidy } from "@tidyjs/tidy";
 import {
   AreaChart,
   BadgeDelta,
@@ -29,45 +28,39 @@ import { useDailySummary } from "~/hooks/analytics/useDailySummary";
 import { useMonthlySummary } from "~/hooks/analytics/useMonthlySummary";
 import DashboardLayout from "../../../components/layouts/dashboard";
 import { api } from "../../../utils/api";
-import { industryAverageNewCustomerRevenuePct } from "../../../utils/constants";
 import {
-  averageArray,
   currencyFormatter,
   numberFormatter,
   percentageFormatter,
-  sumArray,
 } from "../../../utils/formatters";
 
-type MonthData = {
-  Month: string;
-  "Total Revenue": number;
-  "Total New Customer Revenue": number;
-  Profit: number;
-  "New Customer Revenue %": number;
-  "Industry Average %": number;
-};
-
 export default function Overview() {
+  // if store prefix is string
+  const queryResult =
+    api.organization.getOrganizationShopifyPrefix.useQuery().data;
+  const storePrefix =
+    typeof queryResult === "string" ? queryResult : "test-store";
+
   const {
     allTimeSummary,
     isLoadingAllTimeSummary,
     errorAllTimeSummary,
     refetchAllTimeSummary,
-  } = useAllTimeSummary({ storePrefix: "hickory-apparel-au" });
+  } = useAllTimeSummary({ storePrefix });
 
   const {
     monthlySummary,
     isLoadingMonthlySummary,
     errorMonthlySummary,
     refetchMonthlySummary,
-  } = useMonthlySummary({ storePrefix: "hickory-apparel-au" });
+  } = useMonthlySummary({ storePrefix });
 
   const {
     dailySummary,
     isLoadingDailySummary,
     errorDailySummary,
     refetchDailySummary,
-  } = useDailySummary({ storePrefix: "hickory-apparel-au" });
+  } = useDailySummary({ storePrefix });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -157,7 +150,7 @@ export default function Overview() {
                             new Date().setMonth(new Date().getMonth() - 12),
                           ),
                       )}
-                      index="Month"
+                      index="Month Name"
                       categories={[
                         "New Customer Revenue %",
                         "Industry Average NCR %",
@@ -298,32 +291,6 @@ export default function Overview() {
       </main>
     </DashboardLayout>
   );
-}
-
-function TotalRevenueVsNewCustomerData() {
-  const months = [
-    "Jan 22",
-    "Feb 22",
-    "Mar 22",
-    "Apr 22",
-    "May 22",
-    "Jun 22",
-    "Jul 22",
-    "Aug 22",
-    "Sep 22",
-    "Oct 22",
-    "Nov 22",
-    "Dec 22",
-  ];
-
-  return months.map((month) => ({
-    Month: month,
-    "Total Revenue": faker.number.int({ min: 4000, max: 5000 }),
-    "Total New Customer Revenue": faker.number.int({ min: 2000, max: 3800 }),
-    Profit: faker.number.int({ min: 1000, max: 2000 }),
-    "New Customer Revenue %": faker.number.float({ min: 0.4, max: 0.6 }),
-    "Industry Average %": faker.number.float({ min: 0.4, max: 0.6 }),
-  }));
 }
 
 interface ProfitabilityDataProps {
